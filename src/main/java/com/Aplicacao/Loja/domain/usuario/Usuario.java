@@ -22,6 +22,7 @@ public class Usuario implements UserDetails {
     private Long id;
     private String email;
     private String senha;
+    @Enumerated(EnumType.STRING)
     private UsuarioRole usuarioRole;
 
     public Usuario(String email, String senhaEncriptada, UsuarioRole role) {
@@ -33,7 +34,7 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.usuarioRole == UsuarioRole.GERENTE) return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority("ROLE_SUPERVISOR"), new SimpleGrantedAuthority("ROLE_VENDEDOR"));
-        if(this.usuarioRole == usuarioRole.SUPERVISOR) return List.of(new SimpleGrantedAuthority("ROLE_SUPERVISOR"), new SimpleGrantedAuthority("ROLE_VENDEDOR"));
+        if(this.usuarioRole == UsuarioRole.SUPERVISOR) return List.of(new SimpleGrantedAuthority("ROLE_SUPERVISOR"), new SimpleGrantedAuthority("ROLE_VENDEDOR"));
         else return List.of(new SimpleGrantedAuthority("ROLE_VENDEDOR"), new SimpleGrantedAuthority("ROLE_CLIENTE"));
     }
 

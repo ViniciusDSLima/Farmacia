@@ -41,7 +41,7 @@ public class AuthenticationController {
         if(this.usuarioRepository.findByEmail(cadastroDTO.email()) != null) return ResponseEntity.badRequest().build();
 
         String senhaEncriptada = new BCryptPasswordEncoder().encode(cadastroDTO.senha());
-        Usuario novoUsuario = new Usuario(cadastroDTO.email(), senhaEncriptada, cadastroDTO.usuarioRole());
+        Usuario novoUsuario = new Usuario(cadastroDTO.email(), senhaEncriptada, cadastroDTO.role());
 
         this.usuarioRepository.save(novoUsuario);
 
