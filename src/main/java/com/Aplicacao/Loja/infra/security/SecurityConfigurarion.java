@@ -17,6 +17,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurarion {
+    private final String [] cadastroUsuarios = {
+            "/auth/login",
+            "/auth/cadastro",
+    };
+
+    private final String [] gerenciamentoProdutos = {
+            "/produto/cadastro",
+            "/produto/atualizar",
+            "/produto/{id}"
+    };
+
+    private final String [] pedidos = {
+            "/pedidos/comprar",
+            "/pedidos/atualizarPedido",
+            "/pedidos",
+            "/pedidos/{id}",
+            "/pedidos/{id}"
+    };
+
+    private final String [] funcionarios = {
+            "/funcionarios/cadastro",
+            "/funcionarios/atualizar",
+            "/funcionarios",
+            "/funcionarios/{id}",
+            "/funcionarios/{id}"
+    };
+
+
     @Autowired
     SecurityFilter securityFilter;
 
@@ -27,28 +55,16 @@ public class SecurityConfigurarion {
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/auth/cadastro").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/produto/cadastro").hasAnyRole("ROLE_SUPERVISOR")
-                        .requestMatchers(HttpMethod.PUT, "/produto/atualizar").hasAnyRole("ROLE_SUPERVISOR")
-                        .requestMatchers(HttpMethod.GET, "/produto").hasAnyRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.GET, "/produto/{id}").hasAnyRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.DELETE, "/produto/{id}").hasAnyRole("ROLE_SUPERVISOR")
-                        .requestMatchers(HttpMethod.POST,"/pedidos/comprar").hasAnyRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.PUT, "/pedidos/atualizarPedido").hasAnyRole("ROLE_cliente")
-                        .requestMatchers(HttpMethod.GET,"/pedidos").hasAnyRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.GET,"/pedidos/{id}").hasAnyRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.DELETE,"/pedidos/{id}").hasAnyRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.POST,"/funcionarios/cadastro").hasAnyRole("ROLE_GERENTE")
-                        .requestMatchers(HttpMethod.PUT,"/funcionarios/atualizar").hasAnyRole("ROLE_GERENTE")
-                        .requestMatchers(HttpMethod.GET,"/funcionarios").hasRole("ROLE_GERENTE")
-                        .requestMatchers(HttpMethod.GET,"/funcionarios/{id}").hasAnyRole("ROLE_GERENTE")
-                        .requestMatchers(HttpMethod.DELETE,"/funcionarios/{id}").hasAnyRole("ROLE_GERENTE")
-                        .requestMatchers(HttpMethod.POST,"/clientes/cadastro").hasAnyRole("ROLE_USUARIO")
-                        .requestMatchers(HttpMethod.PUT,"/clientes/atualizar").hasRole("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.GET,"/clientes").hasAnyRole("ROLE_SUPERVISOR")
-                        .requestMatchers(HttpMethod.GET,"/cliente/{id}").hasAnyRole("ROLE_SUPERVISOR")
-                        .requestMatchers(HttpMethod.DELETE, "cliente/{id}").hasAnyRole("ROLE_CLIENTE")
+                        .requestMatchers(cadastroUsuarios).permitAll()
+                        .requestMatchers(gerenciamentoProdutos).hasAnyRole("SUPERVISOR")
+                        .requestMatchers(HttpMethod.GET,"/produto","/produto/{id}").hasAnyRole("CLIENTE")
+                        .requestMatchers(pedidos).hasAnyRole("CLIENTE")
+                        .requestMatchers(funcionarios).hasAnyRole("GERENTE")
+                        .requestMatchers(HttpMethod.POST,"/clientes/cadastro").hasAnyRole("USUARIO")
+                        .requestMatchers(HttpMethod.PUT,"/clientes/atualizar").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.GET,"/clientes").hasAnyRole("SUPERVISOR")
+                        .requestMatchers(HttpMethod.GET,"/cliente/{id}").hasAnyRole("SUPERVISOR")
+                        .requestMatchers(HttpMethod.DELETE, "cliente/{id}").hasAnyRole("CLIENTE")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
