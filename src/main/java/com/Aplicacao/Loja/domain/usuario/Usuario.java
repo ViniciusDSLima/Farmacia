@@ -25,10 +25,10 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UsuarioRole usuarioRole;
 
-    public Usuario(String email, String senhaEncriptada, UsuarioRole role) {
+    public Usuario(String email, String senhaEncriptada, UsuarioRole usuarioRole) {
         this.email = email;
         this.senha = senhaEncriptada;
-        this.usuarioRole = role;
+        this.usuarioRole = usuarioRole;
     }
 
     @Override
